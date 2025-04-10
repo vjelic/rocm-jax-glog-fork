@@ -1,6 +1,6 @@
 # peer workspace projects
-xla/
-jax/
+xla
+jax
 
 # vim droppings
 *.swp
