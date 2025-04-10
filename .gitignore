@@ -1,3 +1,10 @@
+# peer workspace projects
+xla/
+jax/
+
+# vim droppings
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
