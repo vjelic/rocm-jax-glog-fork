@@ -26,7 +26,7 @@ import subprocess
 import tempfile
 
 from bazel_tools.tools.python.runfiles import runfiles
-from jax.tools import build_utils
+from jaxlib.tools import build_utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

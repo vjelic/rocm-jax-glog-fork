@@ -26,7 +26,14 @@ licenses(["notice"])
 
 package(
     default_applicable_licenses = [],
-    default_visibility = ["//jax:internal"],
+    default_visibility = [":internal"],
+)
+
+package_group(
+    name = "internal",
+    packages = [
+        "//...",
+    ],
 )
 
 # This makes xla_extension module accessible from jax._src.lib.
@@ -49,7 +56,7 @@ py_library_providing_imports_info(
         "hlo_helpers.py",
         "init.py",
         "lapack.py",
-        ":version",
+        "version.py",
         ":xla_client",
         ":xla_extension_py",
     ],
@@ -82,13 +89,6 @@ py_library_providing_imports_info(
         "//jaxlib/triton",
         "@xla//xla/python:xla_extension",
     ],
-)
-
-symlink_files(
-    name = "version",
-    srcs = ["//jax:version.py"],
-    dst = ".",
-    flatten = True,
 )
 
 symlink_files(
@@ -245,22 +245,6 @@ cc_library(
         "@xla//xla/pjrt/c:pjrt_c_api_helpers",
         "@xla//xla/python:py_client_gpu",
         "@xla//xla/tsl/python/lib/core:numpy",
-    ],
-)
-
-nanobind_extension(
-    name = "cuda_plugin_extension",
-    srcs = ["cuda_plugin_extension.cc"],
-    module_name = "cuda_plugin_extension",
-    deps = [
-        ":gpu_plugin_extension",
-        "@com_google_absl//absl/status",
-        "@com_google_absl//absl/strings",
-        "@local_config_cuda//cuda:cuda_headers",
-        "@nanobind",
-        "@xla//xla/pjrt:status_casters",
-        "@xla//xla/tsl/cuda:cublas",
-        "@xla//xla/tsl/cuda:cudart",
     ],
 )
 

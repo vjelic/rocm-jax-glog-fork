@@ -18,7 +18,7 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
 load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm")
-load("//jaxlib:jax.bzl", "if_windows", "jax_py_test", "jax_wheel")
+load("//jaxlib:jax.bzl", "if_windows", "jax_py_test", "jax_wheel", "pytype_strict_library")
 
 licenses(["notice"])  # Apache 2
 
@@ -41,7 +41,7 @@ py_binary(
         "//jaxlib/mlir/_mlir_libs:jaxlib_mlir_capi.dll",
     ]),
     deps = [
-        "//jax/tools:build_utils",
+        "build_utils",
         "@bazel_tools//tools/python/runfiles",
         "@pypi_build//:pkg",
         "@pypi_setuptools//:pkg",
@@ -82,14 +82,14 @@ py_binary(
         "LICENSE.txt",
         ":pjrt_c_api_gpu_plugin.so",
     ] + if_rocm([
-        "//jaxlib:version",
+        "//jaxlib:version.py",
         "//jaxlib/rocm:rocm_gpu_support",
         "//jax_plugins/rocm:pyproject.toml",
         "//jax_plugins/rocm:setup.py",
         "//jax_plugins/rocm:__init__.py",
     ]),
     deps = [
-        "//jax/tools:build_utils",
+        "build_utils",
         "@bazel_tools//tools/python/runfiles",
         "@pypi_build//:pkg",
         "@pypi_setuptools//:pkg",
@@ -104,13 +104,13 @@ py_binary(
         "LICENSE.txt",
     ]  + if_rocm([
         "//jaxlib:rocm_plugin_extension",
-        "//jaxlib:version",
+        "//jaxlib:version.py",
         "//jaxlib/rocm:rocm_gpu_support",
         "//jax_plugins/rocm:plugin_pyproject.toml",
         "//jax_plugins/rocm:plugin_setup.py",
     ]),
     deps = [
-        "//jax/tools:build_utils",
+        "build_utils",
         "@bazel_tools//tools/python/runfiles",
         "@pypi_build//:pkg",
         "@pypi_setuptools//:pkg",
@@ -181,4 +181,9 @@ jax_wheel(
     # TODO(b/371217563) May use hermetic cuda version here.
     platform_version = "12",
     wheel_binary = ":build_gpu_plugin_wheel",
+)
+
+pytype_strict_library(
+    name = "build_utils",
+    srcs = ["build_utils.py"],
 )
