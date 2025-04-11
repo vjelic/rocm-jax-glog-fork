@@ -29,4 +29,4 @@ install: dist
 	pip install --force-reinstall dist/*
 
 test: install
-	python3 -m unittest discover -v tests
+	python3 tests/test_plugin.py

@@ -16,47 +16,11 @@
 
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
-load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
-load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm")
-load("//jaxlib:jax.bzl", "if_windows", "jax_py_test", "jax_wheel", "pytype_strict_library")
+load("//jaxlib:jax.bzl", "pytype_strict_library")
 
 licenses(["notice"])  # Apache 2
 
 package(default_visibility = ["//visibility:public"])
-
-py_binary(
-    name = "build_wheel",
-    srcs = ["build_wheel.py"],
-    data = [
-        "LICENSE.txt",
-        "//jaxlib",
-        "//jaxlib:README.md",
-        "//jaxlib:setup.py",
-        "@xla//xla/ffi/api:api.h",
-        "@xla//xla/ffi/api:c_api.h",
-        "@xla//xla/ffi/api:ffi.h",
-        "@xla//xla/python:xla_client.py",
-        "@xla//xla/python:xla_extension",
-    ] + if_windows([
-        "//jaxlib/mlir/_mlir_libs:jaxlib_mlir_capi.dll",
-    ]),
-    deps = [
-        "build_utils",
-        "@bazel_tools//tools/python/runfiles",
-        "@pypi_build//:pkg",
-        "@pypi_setuptools//:pkg",
-        "@pypi_wheel//:pkg",
-    ],
-)
-
-jax_py_test(
-    name = "build_wheel_test",
-    srcs = ["build_wheel_test.py"],
-    data = [":build_wheel"],
-    deps = [
-        "@bazel_tools//tools/python/runfiles",
-    ],
-)
 
 cc_binary(
     name = "pjrt_c_api_gpu_plugin.so",
@@ -70,9 +34,8 @@ cc_binary(
         "@xla//xla/pjrt/c:pjrt_c_api_gpu",
         "@xla//xla/pjrt/c:pjrt_c_api_gpu_version_script.lds",
         "@xla//xla/service:gpu_plugin",
-    ] + if_rocm([
         "@xla//xla/stream_executor:rocm_platform",
-    ]),
+    ],
 )
 
 py_binary(
@@ -81,13 +44,12 @@ py_binary(
     data = [
         "LICENSE.txt",
         ":pjrt_c_api_gpu_plugin.so",
-    ] + if_rocm([
         "//jaxlib:version.py",
         "//jaxlib/rocm:rocm_gpu_support",
         "//jax_plugins/rocm:pyproject.toml",
         "//jax_plugins/rocm:setup.py",
         "//jax_plugins/rocm:__init__.py",
-    ]),
+    ],
     deps = [
         "build_utils",
         "@bazel_tools//tools/python/runfiles",
@@ -102,13 +64,12 @@ py_binary(
     srcs = ["build_gpu_kernels_wheel.py"],
     data = [
         "LICENSE.txt",
-    ]  + if_rocm([
         "//jaxlib:rocm_plugin_extension",
         "//jaxlib:version.py",
         "//jaxlib/rocm:rocm_gpu_support",
         "//jax_plugins/rocm:plugin_pyproject.toml",
         "//jax_plugins/rocm:plugin_setup.py",
-    ]),
+    ],
     deps = [
         "build_utils",
         "@bazel_tools//tools/python/runfiles",
@@ -160,27 +121,6 @@ config_setting(
     flag_values = {
         ":jaxlib_git_hash": "nightly",
     },
-)
-
-jax_wheel(
-    name = "jaxlib_wheel",
-    wheel_binary = ":build_wheel",
-)
-
-jax_wheel(
-    name = "jax_cuda_plugin_wheel",
-    enable_cuda = True,
-    # TODO(b/371217563) May use hermetic cuda version here.
-    platform_version = "12",
-    wheel_binary = ":build_gpu_kernels_wheel",
-)
-
-jax_wheel(
-    name = "jax_cuda_pjrt_wheel",
-    enable_cuda = True,
-    # TODO(b/371217563) May use hermetic cuda version here.
-    platform_version = "12",
-    wheel_binary = ":build_gpu_plugin_wheel",
 )
 
 pytype_strict_library(

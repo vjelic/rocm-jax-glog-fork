@@ -17,10 +17,7 @@
 load(
     "//jaxlib:jax.bzl",
     "nanobind_extension",
-    "py_library_providing_imports_info",
-    "pytype_library",
 )
-load("//jaxlib:symlink_files.bzl", "symlink_files")
 
 licenses(["notice"])
 
@@ -36,79 +33,7 @@ package_group(
     ],
 )
 
-# This makes xla_extension module accessible from jax._src.lib.
-genrule(
-    name = "xla_extension_py",
-    outs = ["xla_extension.py"],
-    cmd = "echo 'from xla.xla.python.xla_extension import *\n' > $@",
-)
-
-py_library_providing_imports_info(
-    name = "jaxlib",
-    srcs = [
-        "gpu_common_utils.py",
-        "gpu_linalg.py",
-        "gpu_prng.py",
-        "gpu_rnn.py",
-        "gpu_solver.py",
-        "gpu_sparse.py",
-        "gpu_triton.py",
-        "hlo_helpers.py",
-        "init.py",
-        "lapack.py",
-        "version.py",
-        ":xla_client",
-        ":xla_extension_py",
-    ],
-    data = [":ffi_headers"],
-    lib_rule = pytype_library,
-    deps = [
-        ":cpu_feature_guard",
-        ":utils",
-        "//jaxlib/cpu:_lapack",
-        "//jaxlib/mlir",
-        "//jaxlib/mlir:arithmetic_dialect",
-        "//jaxlib/mlir:builtin_dialect",
-        "//jaxlib/mlir:chlo_dialect",
-        "//jaxlib/mlir:func_dialect",
-        "//jaxlib/mlir:gpu_dialect",
-        "//jaxlib/mlir:ir",
-        "//jaxlib/mlir:llvm_dialect",
-        "//jaxlib/mlir:math_dialect",
-        "//jaxlib/mlir:memref_dialect",
-        "//jaxlib/mlir:mhlo_dialect",
-        "//jaxlib/mlir:nvgpu_dialect",
-        "//jaxlib/mlir:nvvm_dialect",
-        "//jaxlib/mlir:pass_manager",
-        "//jaxlib/mlir:scf_dialect",
-        "//jaxlib/mlir:sdy_dialect",
-        "//jaxlib/mlir:sparse_tensor_dialect",
-        "//jaxlib/mlir:stablehlo_dialect",
-        "//jaxlib/mlir:vector_dialect",
-        "//jaxlib/mosaic",
-        "//jaxlib/triton",
-        "@xla//xla/python:xla_extension",
-    ],
-)
-
-symlink_files(
-    name = "xla_client",
-    srcs = ["@xla//xla/python:xla_client"],
-    dst = ".",
-    flatten = True,
-)
-
-symlink_files(
-    name = "ffi_headers",
-    srcs = ["@xla//xla/ffi/api:all_headers"],
-    dst = "include/xla/ffi/api",
-    flatten = True,
-)
-
-exports_files([
-    "README.md",
-    "setup.py",
-])
+exports_files(["version.py"])
 
 cc_library(
     name = "absl_status_casters",
@@ -171,17 +96,6 @@ cc_library(
 )
 
 cc_library(
-    name = "pass_boilerplate",
-    hdrs = ["pass_boilerplate.h"],
-    # compatible with libtpu
-    deps = [
-        "@llvm-project//mlir:IR",
-        "@llvm-project//mlir:Pass",
-        "@llvm-project//mlir:Support",
-    ],
-)
-
-cc_library(
     name = "handle_pool",
     hdrs = ["handle_pool.h"],
     copts = [
@@ -193,30 +107,6 @@ cc_library(
         "@com_google_absl//absl/base:core_headers",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/synchronization",
-    ],
-)
-
-# This isn't a CPU kernel. This exists to catch cases where jaxlib is built for the wrong
-# target architecture.
-nanobind_extension(
-    name = "cpu_feature_guard",
-    srcs = ["cpu_feature_guard.c"],
-    module_name = "cpu_feature_guard",
-    deps = [
-        "@xla//third_party/python_runtime:headers",
-    ],
-)
-
-nanobind_extension(
-    name = "utils",
-    srcs = ["utils.cc"],
-    module_name = "utils",
-    deps = [
-        "@com_google_absl//absl/cleanup",
-        "@com_google_absl//absl/container:inlined_vector",
-        "@com_google_absl//absl/synchronization",
-        "@nanobind",
-        "@xla//third_party/python_runtime:headers",
     ],
 )
 
@@ -260,26 +150,4 @@ nanobind_extension(
         "@local_config_rocm//rocm:rocm_headers",
         "@nanobind",
     ],
-)
-
-# CPU kernels
-
-# TODO(phawkins): Remove this forwarding target.
-cc_library(
-    name = "cpu_kernels",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//jaxlib/cpu:cpu_kernels",
-    ],
-    alwayslink = 1,
-)
-
-# TODO(phawkins): Remove this forwarding target.
-cc_library(
-    name = "gpu_kernels",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//jaxlib/cuda:cuda_gpu_kernels",
-    ],
-    alwayslink = 1,
 )
