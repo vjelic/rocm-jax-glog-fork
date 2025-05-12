@@ -35,7 +35,9 @@ import sys
 LOG = logging.getLogger(__name__)
 
 
-GPU_DEVICE_TARGETS = "gfx906 gfx908 gfx90a gfx942 gfx1030 gfx1100 gfx1101 gfx1200 gfx1201"
+GPU_DEVICE_TARGETS = (
+    "gfx906 gfx908 gfx90a gfx942 gfx1030 gfx1100 gfx1101 gfx1200 gfx1201"
+)
 
 
 def build_rocm_path(rocm_version_str):
@@ -87,7 +89,7 @@ def find_clang_path():
 
 
 def build_jaxlib_wheel(
-    jax_path, rocm_path, python_version, xla_path=None, compiler="gcc"
+    jax_path, rocm_path, python_version, output_dir, xla_path=None, compiler="gcc"
 ):
     use_clang = "true" if compiler == "clang" else "false"
 
@@ -105,11 +107,12 @@ def build_jaxlib_wheel(
         "python",
         "build/build.py",
         "build",
-        "--wheels=jaxlib,jax-rocm-plugin,jax-rocm-pjrt",
+        "--wheels=jax-rocm-plugin,jax-rocm-pjrt",
         "--rocm_path=%s" % rocm_path,
         "--rocm_version=60",
         "--use_clang=%s" % use_clang,
-        "--verbose"
+        "--verbose",
+        "--output_path=%s" % output_dir,
     ]
 
     # Add clang path if clang is used.
@@ -286,38 +289,35 @@ def main():
     args = parse_args()
     python_versions = args.python_versions.split(",")
 
+    manylinux_output_dir = "dist_manylinux"
+
     print("ROCM_VERSION=%s" % args.rocm_version)
     print("PYTHON_VERSIONS=%r" % python_versions)
     print("JAX_PATH=%s" % args.jax_path)
     print("XLA_PATH=%s" % args.xla_path)
     print("COMPILER=%s" % args.compiler)
+    print("OUTPUT_DIR=%s" % manylinux_output_dir)
 
     rocm_path = build_rocm_path(args.rocm_version)
 
     update_rocm_targets(rocm_path, GPU_DEVICE_TARGETS)
 
+    full_output_path = os.path.join(args.jax_path, manylinux_output_dir)
+    os.makedirs(full_output_path, exist_ok=True)
+
+    # wipe anything in output dir before building new
+    wheel_paths = find_wheels(full_output_path)
+    for whl in wheel_paths:
+        print("Removing wheel=%r" % whl)
+        os.remove(whl)
+
     for py in python_versions:
-        build_jaxlib_wheel(args.jax_path, rocm_path, py, args.xla_path, args.compiler)
-        wheel_paths = find_wheels(os.path.join(args.jax_path, "dist"))
+        build_jaxlib_wheel(
+            args.jax_path, rocm_path, py, full_output_path, args.xla_path, args.compiler
+        )
+        wheel_paths = find_wheels(full_output_path)
         for wheel_path in wheel_paths:
-            # skip jax wheel since it is non-platform
-            if not os.path.basename(wheel_path).startswith("jax-"):
-                fix_wheel(wheel_path, args.jax_path)
-
-    # build JAX wheel for completeness
-    build_jax_wheel(args.jax_path, python_versions[-1])
-    wheels = find_wheels(os.path.join(args.jax_path, "dist"))
-
-    # NOTE(mrodden): the jax wheel is a "non-platform wheel", so auditwheel will
-    # do nothing, and in fact will throw an Exception. we just need to copy it
-    # along with the jaxlib and plugin ones
-
-    # copy jax wheel(s) to wheelhouse
-    wheelhouse_dir = "/wheelhouse/"
-    for whl in wheels:
-        if os.path.basename(whl).startswith("jax-"):
-            LOG.info("Copying %s into %s" % (whl, wheelhouse_dir))
-            shutil.copy(whl, wheelhouse_dir)
+            fix_wheel(wheel_path, args.jax_path)
 
 
 if __name__ == "__main__":
