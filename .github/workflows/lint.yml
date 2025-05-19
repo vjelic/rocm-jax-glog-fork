@@ -1,0 +1,85 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  pylint:
+    name: Pylint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          files: |
+            **/*.py
+      - name: Install pylint
+        run: pip install pylint
+      - name: Run pylint
+        if: steps.changed-files.outputs.all_changed_files == 'true'
+        run: |
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs pylint --output-format=colorized
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          files: |
+            **/*.py
+      - name: Run black
+        if: steps.changed-files.outputs.all_changed_files == 'true'
+        uses: psf/black@stable
+        with:
+          options: '--check --verbose -t py36'
+          src: ${{ steps.changed-files.outputs.all_changed_files }}
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          files: |
+            **/*.sh
+      - name: Run shellcheck
+        if: steps.changed-files.outputs.all_changed_files == 'true'
+        run: |
+          FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | sed 's|^|/mnt/|')
+          docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:stable --color=always $FILES
+  yamllint:
+    name: Yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        with:
+          files: |
+            **/*.yml
+      - name: Run yamllint
+        if: steps.changed-files.outputs.all_changed_files == 'true'
+        uses: karancode/yamllint-github-action@master
+        with:
+          yamllint_file_or_dir: ${{ steps.changed-files.outputs.all_changed_files }}
+          yamllint_strict: true
+          yamllint_comment: true
+
