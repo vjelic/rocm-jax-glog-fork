@@ -38,6 +38,7 @@ There are two options for setting up your Docker environment.
 Use the docker setup script in tools to set up your environment.
 
 ```
+cd /rocm-jax
 bash tools/docker_dev_setup.sh
 ```
 
@@ -96,6 +97,7 @@ popd
 
 Install ROCm
 ```
+cd /rocm-jax
 python build/tools/get_rocm.py --rocm-version 6.4.0
 ```
 
