@@ -82,7 +82,7 @@ def print_link_info():
         mod = None
 
         try:
-            modname = "jax_rocm7_plugin.%s" % so
+            modname = "jax_rocm60_plugin.%s" % so
             print("Loading %r" % modname)
             mod = importlib.import_module(modname)
         except Exception as ex:

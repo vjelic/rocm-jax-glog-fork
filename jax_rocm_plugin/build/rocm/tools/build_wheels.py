@@ -37,7 +37,7 @@ import sys
 LOG = logging.getLogger(__name__)
 
 
-ROCM_PLUGIN_NAME_VERSION = "7"
+ROCM_PLUGIN_NAME_VERSION = "60"
 
 
 GPU_DEVICE_TARGETS = (
