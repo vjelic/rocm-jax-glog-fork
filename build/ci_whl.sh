@@ -21,10 +21,3 @@ python3 build/ci_build \
 # copy wheels from plugin wheel build
 mkdir -p wheelhouse
 cp jax_rocm_plugin/wheelhouse/* wheelhouse/
-
-for whl in wheelhouse/*; do
-    curl -u "$ARTIFACTORY_USER:$ARTIFACTORY_PASSWORD" \
-        -T "$whl" \
-        "https://compute-artifactory.amd.com/artifactory/generic-local/rocm-jax/$(basename "$whl")" \
-        || die "Failed to upload $(basename "$whl") to Artifactory"
-done

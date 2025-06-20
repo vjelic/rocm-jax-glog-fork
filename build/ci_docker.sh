@@ -14,5 +14,4 @@ python3 build/ci_build \
     --rocm-build-job "$2" \
     --rocm-build-num "$3" \
     build_dockers \
-    -f ubu22 \
     || die "failed to build docker image(s) for testing"
