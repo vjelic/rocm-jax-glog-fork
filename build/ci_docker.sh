@@ -10,9 +10,9 @@ die() {
 }
 
 python3 build/ci_build \
-    --rocm-version 7.0.0 \
-    --rocm-build-job compute-rocm-dkms-no-npi-hipclang \
-    --rocm-build-num 16051 \
+    --rocm-version "$1" \
+    --rocm-build-job "$2" \
+    --rocm-build-num "$3" \
     build_dockers \
     -f ubu22 \
     || die "failed to build docker image(s) for testing"
