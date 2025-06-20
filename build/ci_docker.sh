@@ -14,4 +14,5 @@ python3 build/ci_build \
     --rocm-build-job "$2" \
     --rocm-build-num "$3" \
     build_dockers \
+    --tag "$4" \
     || die "failed to build docker image(s) for testing"
