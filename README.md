@@ -69,14 +69,17 @@ apt-get update
 apt-get install -y \
   python3 \
   python-is-python3 \
-  python3.10-venv \
+  wget \
+  curl \
   vim \
-  git \
   build-essential \
   make \
+  patchelf \
+  python3.10-venv \
+  lsb-release \
   cmake \
-  wget \
-  curl
+  yamllint \
+  shellcheck
 ```
 
 Install clang
