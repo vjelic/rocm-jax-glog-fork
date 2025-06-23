@@ -14,7 +14,7 @@ JAX_REPL_URL = "https://github.com/rocm/jax"
 XLA_REPL_URL = "https://github.com/rocm/xla"
 
 
-PLUGIN_NAMESPACE_VERSION = "60"
+PLUGIN_NAMESPACE_VERSION = "7"
 
 
 MAKE_TEMPLATE = r"""
