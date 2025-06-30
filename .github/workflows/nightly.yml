@@ -11,7 +11,9 @@ concurrency:
 
 jobs:
   call-build-wheels:
+    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         rocm-version: ["6.4.1", "7.0"]
         include:
@@ -31,6 +33,7 @@ jobs:
   call-build-docker:
     needs: call-build-wheels
     strategy:
+      fail-fast: false
       matrix:
         rocm-version: ["6.4.1", "7.0"]
         include:
