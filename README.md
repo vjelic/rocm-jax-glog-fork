@@ -54,10 +54,19 @@ After this you should re-run stack.py develop to rebuild your makefile
 python stack.py develop --rebuild-makefile
 ```
 
-
 Now you can build the plugin
 ```
 (cd jax_rocm_plugin && make clean dist)
+```
+
+To activate the virtual environment, run the following:
+```
+source .venv/bin/activate
+```
+
+To install the newly built plugin wheels, run the following command:
+```
+pip install jax_rocm_plugin/dist/*.whl
 ```
 
 
@@ -108,6 +117,19 @@ Create a virtualenv and activate it
 ```
 python -m venv .venv
 . .venv/bin/activate
+```
+
+Install dependencies
+```
+pip install -r build/requirements.txt
+```
+
+If using ROCm version >= 7, apply necessary patch for namespace change
+```
+patch -p1 \
+    -d "$(python3 -c \"import sysconfig; print(sysconfig.get_paths()['purelib'])\")" \
+    < jax_rocm_plugin/third_party/jax/namespace.patch
+
 ```
 
 Run stack.py to refresh your local Makefile for the docker env
