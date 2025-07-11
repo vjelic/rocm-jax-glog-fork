@@ -145,7 +145,7 @@ Use make to build the plugin
 
 Clone the repository
 ```
-git clone https://github.com/ROCm/rocm-jax.git && cd rocm-jax
+git clone https://github.com/ROCm/rocm-jax.git && cd rocm-jax && git checkout rocm-jaxlib-v0.6.0
 ```
 
 Build manylinux wheels
