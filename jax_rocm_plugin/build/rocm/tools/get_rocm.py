@@ -153,19 +153,9 @@ def _setup_internal_repo(system, rocm_version, job_name, build_num):
 
     install_amdgpu_installer_internal(rocm_version)
 
-    amdgpu_build = (
-        urllib.request.urlopen(
-            "http://rocm-ci.amd.com/job/%s/%s/artifact/amdgpu_kernel_info.txt"
-            % (job_name, build_num)
-        )
-        .read()
-        .decode("utf8")
-        .strip()
-    )
 
     cmd = [
         "amdgpu-repo",
-        "--amdgpu-build=%s" % amdgpu_build,
         "--rocm-build=%s/%s" % (job_name, build_num),
     ]
     LOG.info("Running %r" % cmd)
