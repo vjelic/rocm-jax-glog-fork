@@ -155,7 +155,7 @@ def _setup_internal_repo(system, rocm_version, job_name, build_num):
 
     amdgpu_build = (
         urllib.request.urlopen(
-            "http://rocm-ci.amd.com/job/%s/%s/artifact/amdgpu_kernel_info.txt"
+            "https://rocm-ci.amd.com/job/%s/%s/artifact/amdgpu_kernel_info.txt"
             % (job_name, build_num)
         )
         .read()
