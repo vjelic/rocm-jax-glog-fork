@@ -272,12 +272,6 @@ def setup_repos_ubuntu(rocm_version_str):
     keyadd = "wget -qO - https://repo.radeon.com/rocm/rocm.gpg.key | sudo apt-key add -"
     subprocess.check_call(keyadd, shell=True)
 
-    with open("/etc/apt/sources.list.d/amdgpu.list", "w") as fd:
-        fd.write(
-            ("deb [arch=amd64] " "https://repo.radeon.com/amdgpu/%s/ubuntu %s main\n")
-            % (rocm_version_str, codename)
-        )
-
     with open("/etc/apt/sources.list.d/rocm.list", "w") as fd:
         fd.write(
             ("deb [arch=amd64] " "https://repo.radeon.com/rocm/apt/%s %s main\n")
@@ -301,19 +295,6 @@ def setup_repos_el8(rocm_version_str):
 [ROCm]
 name=ROCm
 baseurl=http://repo.radeon.com/rocm/rhel8/%s/main
-enabled=1
-gpgcheck=1
-gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
-"""
-            % rocm_version_str
-        )
-
-    with open("/etc/yum.repos.d/amdgpu.repo", "w") as afd:
-        afd.write(
-            """
-[amdgpu]
-name=amdgpu
-baseurl=https://repo.radeon.com/amdgpu/%s/rhel/8.8/main/x86_64/
 enabled=1
 gpgcheck=1
 gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
