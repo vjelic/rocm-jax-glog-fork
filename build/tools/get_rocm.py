@@ -96,7 +96,6 @@ UBUNTU = System(
 RHEL8 = System(
     pkgbin="dnf",
     rocm_package_list=[
-        "libdrm-amdgpu",
         "rocm-dev",
         "rocm-ml-sdk",
         "miopen-hip ",
@@ -301,6 +300,7 @@ gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
 """
             % rocm_version_str
         )
+
 
 
 def parse_args():
