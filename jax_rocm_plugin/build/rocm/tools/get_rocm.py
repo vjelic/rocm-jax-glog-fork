@@ -96,7 +96,6 @@ UBUNTU = System(
 RHEL8 = System(
     pkgbin="dnf",
     rocm_package_list=[
-        "libdrm-amdgpu",
         "rocm-dev",
         "rocm-ml-sdk",
         "miopen-hip ",
