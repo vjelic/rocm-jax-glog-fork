@@ -302,7 +302,6 @@ gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key
         )
 
   
-
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--rocm-version", help="ROCm version to install", default="latest")
