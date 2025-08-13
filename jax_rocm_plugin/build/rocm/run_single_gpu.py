@@ -13,7 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Single GPU test runner for JAX with ROCm.
+
+This script runs JAX tests on individual GPUs in parallel, excluding
+multi-GPU tests that require multiple devices.
+"""
+
 import os
+import sys
 import json
 import argparse
 import threading
@@ -24,88 +32,58 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
+# Add the configuration directory to Python path
+sys.path.insert(0, 'jax_rocm_plugin/build/rocm')
+
+# Import multi-GPU tests configuration
+try:
+    from multi_gpu_tests_config import MULTI_GPU_TESTS
+except ImportError as e:
+    print(f"Error: Could not import multi_gpu_tests_config from jax_rocm_plugin/build/rocm/: {e}")
+    print("Please ensure multi_gpu_tests_config.py exists in jax_rocm_plugin/build/rocm/ directory")
+    sys.exit(1)
+
 GPU_LOCK = threading.Lock()
 LAST_CODE = 0
-base_dir = "./logs"
-
-# Multi-GPU test files that should be excluded from single GPU runs
-MULTI_GPU_TESTS = {
-    "tests/multiprocess_gpu_test.py",
-    "tests/debug_info_test.py",
-    "tests/checkify_test.py",
-    "tests/mosaic/gpu_test.py",
-    "tests/random_test.py",
-    "tests/jax_jit_test.py",
-    "tests/mesh_utils_test.py",
-    "tests/pjit_test.py",
-    "tests/linalg_sharding_test.py",
-    "tests/multi_device_test.py",
-    "tests/distributed_test.py",
-    "tests/shard_alike_test.py",
-    "tests/api_test.py",
-    "tests/ragged_collective_test.py",
-    "tests/batching_test.py",
-    "tests/scaled_matmul_stablehlo_test.py",
-    "tests/export_harnesses_multi_platform_test.py",
-    "tests/pickle_test.py",
-    "tests/roofline_test.py",
-    "tests/profiler_test.py",
-    "tests/error_check_test.py",
-    "tests/debug_nans_test.py",
-    "tests/shard_map_test.py",
-    "tests/colocated_python_test.py",
-    "tests/cudnn_fusion_test.py",
-    "tests/compilation_cache_test.py",
-    "tests/export_back_compat_test.py",
-    "tests/pgle_test.py",
-    "tests/ffi_test.py",
-    "tests/lax_control_flow_test.py",
-    "tests/fused_attention_stablehlo_test.py",
-    "tests/layout_test.py",
-    "tests/pmap_test.py",
-    "tests/aot_test.py",
-    "tests/mock_gpu_topology_test.py",
-    "tests/ann_test.py",
-    "tests/debugging_primitives_test.py",
-    "tests/array_test.py",
-    "tests/export_test.py",
-    "tests/memories_test.py",
-    "tests/debugger_test.py",
-    "tests/python_callback_test.py",
-}
+BASE_DIR = "./logs"
 
 
 def extract_filename(path):
+    """Extract filename without extension from a path."""
     base_name = os.path.basename(path)
     file_name, _ = os.path.splitext(base_name)
     return file_name
 
 
 def combine_json_reports():
-    all_json_files = [f for f in os.listdir(base_dir) if f.endswith("_log.json")]
+    """Combine all individual JSON test reports into a single report."""
+    all_json_files = [f for f in os.listdir(BASE_DIR) if f.endswith("_log.json")]
     combined_data = []
     for json_file in all_json_files:
-        with open(os.path.join(base_dir, json_file), "r") as infile:
+        with open(os.path.join(BASE_DIR, json_file), "r", encoding="utf-8") as infile:
             data = json.load(infile)
             combined_data.append(data)
-    combined_json_file = f"{base_dir}/final_compiled_report.json"
-    with open(combined_json_file, "w") as outfile:
+    combined_json_file = f"{BASE_DIR}/final_compiled_report.json"
+    with open(combined_json_file, "w", encoding="utf-8") as outfile:
         json.dump(combined_data, outfile, indent=4)
 
 
-def generate_final_report(shell=False, env_vars={}):
-    env = os.environ
-    env = {**env, **env_vars}
+def generate_final_report(shell=False, env_vars=None):
+    """Generate final HTML and JSON reports by merging individual test reports."""
+    if env_vars is None:
+        env_vars = {}
+    env = os.environ.copy()
+    env.update(env_vars)
 
     # First, try to merge HTML files
     cmd = [
         "pytest_html_merger",
         "-i",
-        f"{base_dir}",
+        f"{BASE_DIR}",
         "-o",
-        f"{base_dir}/final_compiled_report.html",
+        f"{BASE_DIR}/final_compiled_report.html",
     ]
-    result = subprocess.run(cmd, shell=shell, capture_output=True, env=env)
+    result = subprocess.run(cmd, shell=shell, capture_output=True, env=env, check=False)
     if result.returncode != 0:
         print("FAILED - {}".format(" ".join(cmd)))
         print(result.stderr.decode())
@@ -115,10 +93,13 @@ def generate_final_report(shell=False, env_vars={}):
     combine_json_reports()
 
 
-def run_shell_command(cmd, shell=False, env_vars={}):
-    env = os.environ
-    env = {**env, **env_vars}
-    result = subprocess.run(cmd, shell=shell, capture_output=True, env=env)
+def run_shell_command(cmd, shell=False, env_vars=None):
+    """Run a shell command and return the result."""
+    if env_vars is None:
+        env_vars = {}
+    env = os.environ.copy()
+    env.update(env_vars)
+    result = subprocess.run(cmd, shell=shell, capture_output=True, env=env, check=False)
     if result.returncode != 0:
         print("FAILED - {}".format(" ".join(cmd)))
         print(result.stderr.decode())
@@ -127,9 +108,9 @@ def run_shell_command(cmd, shell=False, env_vars={}):
 
 
 def parse_test_log(log_file):
-    """Parses the test module log file to extract test modules and functions."""
+    """Parse the test module log file to extract test modules and functions."""
     test_files = set()
-    with open(log_file, "r") as f:
+    with open(log_file, "r", encoding="utf-8") as f:
         for line in f:
             report = json.loads(line)
             if "nodeid" in report:
@@ -140,7 +121,8 @@ def parse_test_log(log_file):
 
 
 def collect_testmodules():
-    log_file = f"{base_dir}/collect_module_log.jsonl"
+    """Collect all test modules, excluding multi-GPU tests."""
+    log_file = f"{BASE_DIR}/collect_module_log.jsonl"
     return_code, stderr, stdout = run_shell_command(
         [
             "python3",
@@ -155,7 +137,7 @@ def collect_testmodules():
         print("Test module discovery failed.")
         print("STDOUT:", stdout)
         print("STDERR:", stderr)
-        exit(return_code)
+        sys.exit(return_code)
     print("---------- collected test modules ----------")
     test_files = parse_test_log(log_file)
 
@@ -179,7 +161,8 @@ def collect_testmodules():
 
 
 def run_test(testmodule, gpu_tokens, continue_on_fail):
-    global LAST_CODE
+    """Run a single test module on an available GPU."""
+    global LAST_CODE  # pylint: disable=global-statement
     with GPU_LOCK:
         if LAST_CODE != 0:
             return
@@ -190,9 +173,9 @@ def run_test(testmodule, gpu_tokens, continue_on_fail):
         "XLA_PYTHON_CLIENT_ALLOCATOR": "default",
     }
     testfile = extract_filename(testmodule)
-    json_log_file = f"{base_dir}/{testfile}_log.json"
-    html_log_file = f"{base_dir}/{testfile}_log.html"
-    last_running_file = f"{base_dir}/{testfile}_last_running.json"
+    json_log_file = f"{BASE_DIR}/{testfile}_log.json"
+    html_log_file = f"{BASE_DIR}/{testfile}_log.html"
+    last_running_file = f"{BASE_DIR}/{testfile}_last_running.json"
 
     if continue_on_fail:
         cmd = [
@@ -227,7 +210,7 @@ def run_test(testmodule, gpu_tokens, continue_on_fail):
     # Check for aborted test log and append abort info if present
     if os.path.exists(last_running_file):
         try:
-            with open(last_running_file, "r") as f:
+            with open(last_running_file, "r", encoding="utf-8") as f:
                 abort_data = json.load(f)
             start_time = datetime.fromisoformat(abort_data["start_time"])
             duration = (datetime.now() - start_time).total_seconds()
@@ -245,7 +228,7 @@ def run_test(testmodule, gpu_tokens, continue_on_fail):
             print(f"[ABORT DETECTED] {testfile}: {abort_info['test_name']}")
             # Only remove the file after successful processing
             # os.remove(last_running_file)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Error logging abort for {testfile}: {e}")
             # Don't remove the file if there was an error processing it
 
@@ -255,14 +238,20 @@ def run_test(testmodule, gpu_tokens, continue_on_fail):
             print("Running tests in module %s on GPU %d:" % (testmodule, target_gpu))
             print(stdout)
             print(stderr)
-            if continue_on_fail == False:
+            if not continue_on_fail:
                 LAST_CODE = return_code
 
 
 def append_abort_to_json(json_file, testfile, abort_info):
-    """Append abort info to JSON report in pytest format"""
+    """Append abort info to JSON report in pytest format."""
     # Create test nodeid in the format expected by pytest
     test_nodeid = f"tests/{testfile}.py::{abort_info['test_name']}"
+
+    abort_longrepr = (
+        f"Test aborted: {abort_info.get('reason', 'Unknown abort reason')}\n"
+        f"Abort detected at: {abort_info.get('abort_time', '')}\n"
+        f"GPU ID: {abort_info.get('gpu_id', 'unknown')}"
+    )
 
     abort_test = {
         "nodeid": test_nodeid,
@@ -273,7 +262,7 @@ def append_abort_to_json(json_file, testfile, abort_info):
         "call": {
             "duration": abort_info.get("duration", 0),
             "outcome": "failed",
-            "longrepr": f"Test aborted: {abort_info.get('reason', 'Unknown abort reason')}\nAbort detected at: {abort_info.get('abort_time', '')}\nGPU ID: {abort_info.get('gpu_id', 'unknown')}",
+            "longrepr": abort_longrepr,
         },
         "teardown": {"duration": 0.0, "outcome": "skipped"},
     }
@@ -282,7 +271,7 @@ def append_abort_to_json(json_file, testfile, abort_info):
         # Check if JSON file already exists (normal test run completed)
         if os.path.exists(json_file):
             # File exists - read existing data and append the aborted test
-            with open(json_file, "r") as f:
+            with open(json_file, "r", encoding="utf-8") as f:
                 report_data = json.load(f)
 
             # Add the abort test to existing tests
@@ -336,7 +325,7 @@ def append_abort_to_json(json_file, testfile, abort_info):
         os.makedirs(os.path.dirname(json_file), exist_ok=True)
 
         # Write the file
-        with open(json_file, "w") as f:
+        with open(json_file, "w", encoding="utf-8") as f:
             json.dump(report_data, f, indent=2)
 
     except (OSError, IOError) as e:
@@ -372,34 +361,33 @@ def append_abort_to_json(json_file, testfile, abort_info):
                 "tests": [abort_test],
             }
             os.makedirs(os.path.dirname(json_file), exist_ok=True)
-            with open(json_file, "w") as f:
+            with open(json_file, "w", encoding="utf-8") as f:
                 json.dump(new_report_data, f, indent=2)
         except (OSError, IOError) as io_e:
             print(f"Failed to create new JSON report for {testfile}: {io_e}")
 
 
-def append_abort_to_html(html_file, testfile, abort_info):
-    """Generate or append abort info to pytest-html format HTML report"""
-    try:
-        # Check if HTML file already exists (normal test run completed)
-        if os.path.exists(html_file):
-            # File exists - read and append abort test row to existing HTML
-            with open(html_file, "r", encoding="utf-8") as f:
-                html_content = f.read()
+def _create_abort_row_html(testfile, abort_info):
+    """Create HTML row for abort test."""
+    test_name = abort_info["test_name"]
+    duration = abort_info.get("duration", 0)
+    abort_time = abort_info.get("abort_time", "")
+    gpu_id = abort_info.get("gpu_id", "unknown")
 
-            test_name = abort_info["test_name"]
-            duration = abort_info.get("duration", 0)
-            abort_time = abort_info.get("abort_time", "")
-            gpu_id = abort_info.get("gpu_id", "unknown")
+    # Convert duration to HH:MM:SS format matching pytest-html format
+    hours = int(duration // 3600)
+    minutes = int((duration % 3600) // 60)
+    seconds = int(duration % 60)
+    duration_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
-            # Convert duration to HH:MM:SS format matching pytest-html format
-            hours = int(duration // 3600)
-            minutes = int((duration % 3600) // 60)
-            seconds = int(duration % 60)
-            duration_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    abort_reason = abort_info.get("reason", "Test aborted or crashed.")
+    log_content = (
+        f"Test aborted: {abort_reason}<br/>"
+        f"Abort detected at: {abort_time}<br/>"
+        f"GPU ID: {gpu_id}"
+    )
 
-            # Create abort test row HTML
-            abort_row = f"""
+    return f"""
                 <tbody class="results-table-row">
                     <tr class="collapsible">
                         <td class="col-result">Failed</td>
@@ -412,20 +400,145 @@ def append_abort_to_html(html_file, testfile, abort_info):
                             <div class="extraHTML"></div>
                             <div class="logwrapper">
                                 <div class="logexpander"></div>
-                                <div class="log">Test aborted: {abort_info.get('reason', 'Test aborted or crashed.')}<br/>
-Abort detected at: {abort_time}<br/>
-GPU ID: {gpu_id}</div>
+                                <div class="log">{log_content}</div>
                             </div>
                         </td>
                     </tr>
                 </tbody>"""
 
-            # Insert the abort row before the closing </table> tag of results-table specifically
+
+def _update_html_summary_counts(html_content):
+    """Update test counts in HTML summary."""
+    # Fix malformed run-count patterns first
+    malformed_pattern = r"(\d+/\d+ test done\.)"
+    if re.search(malformed_pattern, html_content):
+        # Replace malformed pattern with proper format
+        html_content = re.sub(
+            malformed_pattern, "1 tests took 00:00:01.", html_content
+        )
+
+    # Update "X tests ran in Y" pattern (legacy format)
+    count_pattern = r"(\d+) tests? ran in"
+    match = re.search(count_pattern, html_content)
+    if match:
+        current_count = int(match.group(1))
+        new_count = current_count + 1
+        html_content = re.sub(
+            count_pattern, f"{new_count} tests ran in", html_content
+        )
+
+    # Update "X test took" pattern (current pytest-html format)
+    count_pattern2 = r"(\d+) tests? took"
+    match = re.search(count_pattern2, html_content)
+    if match:
+        current_count = int(match.group(1))
+        new_count = current_count + 1
+        html_content = re.sub(
+            count_pattern2, f"{new_count} tests took", html_content
+        )
+
+    # Update "X Failed" count in the summary
+    failed_pattern = r"(\d+) Failed"
+    match = re.search(failed_pattern, html_content)
+    if match:
+        current_failed = int(match.group(1))
+        new_failed = current_failed + 1
+        html_content = re.sub(
+            failed_pattern, f"{new_failed} Failed", html_content
+        )
+    else:
+        # If no failed tests before, enable the failed filter and update count
+        html_content = html_content.replace("0 Failed,", "1 Failed,")
+        html_content = html_content.replace(
+            'data-test-result="failed" disabled',
+            'data-test-result="failed"',
+        )
+
+    return html_content
+
+
+def _update_html_json_data(html_content, testfile, abort_info):
+    """Update JSON data in HTML file."""
+    jsonblob_pattern = r'data-jsonblob="([^"]*)"'
+    match = re.search(jsonblob_pattern, html_content)
+    if not match:
+        return html_content
+
+    try:
+        # Decode the HTML-escaped JSON
+        json_str = html.unescape(match.group(1))
+        existing_json = json.loads(json_str)
+
+        # Add the abort test to the tests array
+        if "tests" not in existing_json:
+            existing_json["tests"] = {}
+
+        test_name = abort_info["test_name"]
+        duration = abort_info.get("duration", 0)
+        abort_time = abort_info.get("abort_time", "")
+        gpu_id = abort_info.get("gpu_id", "unknown")
+
+        # Convert duration to HH:MM:SS format
+        hours = int(duration // 3600)
+        minutes = int((duration % 3600) // 60)
+        seconds = int(duration % 60)
+        duration_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+        # Create new test entry
+        test_id = f"test_{len(existing_json['tests'])}"
+        log_msg = (
+            f"Test aborted: {abort_info.get('reason', 'Test aborted or crashed.')}\\n"
+            f"Abort detected at: {abort_time}\\n"
+            f"GPU ID: {gpu_id}"
+        )
+        new_test = {
+            "testId": f"tests/{testfile}.py::{test_name}",
+            "id": test_id,
+            "log": log_msg,
+            "extras": [],
+            "resultsTableRow": [
+                '<td class="col-result">Failed</td>',
+                f'<td class="col-name">tests/{testfile}.py::{test_name}</td>',
+                f'<td class="col-duration">{duration_str}</td>',
+                '<td class="col-links"></td>',
+            ],
+            "tableHtml": [],
+            "result": "failed",
+            "collapsed": False,
+        }
+        existing_json["tests"][test_id] = new_test
+
+        # Re-encode the JSON and escape for HTML
+        updated_json_str = html.escape(json.dumps(existing_json))
+        html_content = re.sub(
+            jsonblob_pattern,
+            f'data-jsonblob="{updated_json_str}"',
+            html_content,
+        )
+
+    except (json.JSONDecodeError, Exception) as e:  # pylint: disable=broad-exception-caught
+        print(f"Warning: Could not update JSON data in HTML file: {e}")
+
+    return html_content
+
+
+def append_abort_to_html(html_file, testfile, abort_info):
+    """Generate or append abort info to pytest-html format HTML report."""
+    try:
+        # Check if HTML file already exists (normal test run completed)
+        if os.path.exists(html_file):
+            # File exists - read and append abort test row to existing HTML
+            with open(html_file, "r", encoding="utf-8") as f:
+                html_content = f.read()
+
+            # Create abort test row HTML
+            abort_row = _create_abort_row_html(testfile, abort_info)
+
+            # Insert the abort row before the closing </table> tag
             if "</table>" in html_content:
                 # Find the results-table specifically, not the environment table
-                results_table_end = html_content.find(
-                    "</table>", html_content.find('<table id="results-table">')
-                )
+                results_table_start = html_content.find('<table id="results-table">')
+                results_table_end = html_content.find("</table>", results_table_start)
                 if results_table_end != -1:
                     # Insert before the specific results table closing tag
                     html_content = (
@@ -434,103 +547,15 @@ GPU ID: {gpu_id}</div>
                         + html_content[results_table_end:]
                     )
                 else:
-                    print(
-                        f"Warning: Could not find results-table closing tag in {html_file}"
-                    )
+                    print(f"Warning: Could not find results-table closing tag in {html_file}")
                     _create_new_html_file(html_file, testfile, abort_info)
                     return
 
-                # Update the test count in the summary (find and replace pattern)
+                # Update test counts and JSON data
+                html_content = _update_html_summary_counts(html_content)
+                html_content = _update_html_json_data(html_content, testfile, abort_info)
 
-                # Fix malformed run-count patterns first
-                malformed_pattern = r"(\d+/\d+ test done\.)"
-                if re.search(malformed_pattern, html_content):
-                    # Replace malformed pattern with proper format matching other pytest-html files
-                    html_content = re.sub(
-                        malformed_pattern, "1 tests took 00:00:01.", html_content
-                    )
-
-                # Update "X tests ran in Y" pattern that pytest_html_merger looks for (legacy format)
-                count_pattern = r"(\d+) tests? ran in"
-                match = re.search(count_pattern, html_content)
-                if match:
-                    current_count = int(match.group(1))
-                    new_count = current_count + 1
-                    html_content = re.sub(
-                        count_pattern, f"{new_count} tests ran in", html_content
-                    )
-
-                # Update "X test took" pattern (current pytest-html format)
-                count_pattern2 = r"(\d+) tests? took"
-                match = re.search(count_pattern2, html_content)
-                if match:
-                    current_count = int(match.group(1))
-                    new_count = current_count + 1
-                    html_content = re.sub(
-                        count_pattern2, f"{new_count} tests took", html_content
-                    )
-
-                # Update "X Failed" count in the summary
-                failed_pattern = r"(\d+) Failed"
-                match = re.search(failed_pattern, html_content)
-                if match:
-                    current_failed = int(match.group(1))
-                    new_failed = current_failed + 1
-                    html_content = re.sub(
-                        failed_pattern, f"{new_failed} Failed", html_content
-                    )
-                else:
-                    # If no failed tests before, need to enable the failed filter and update count
-                    html_content = html_content.replace("0 Failed,", "1 Failed,")
-                    html_content = html_content.replace(
-                        'data-test-result="failed" disabled',
-                        'data-test-result="failed"',
-                    )
-
-                # Update the JSON data in data-jsonblob to include the abort test
-                jsonblob_pattern = r'data-jsonblob="([^"]*)"'
-                match = re.search(jsonblob_pattern, html_content)
-                if match:
-                    try:
-                        # Decode the HTML-escaped JSON
-                        json_str = html.unescape(match.group(1))
-                        existing_json = json.loads(json_str)
-
-                        # Add the abort test to the tests array
-                        if "tests" not in existing_json:
-                            existing_json["tests"] = {}
-
-                        # Create new test entry - use dictionary format for pytest_html_merger compatibility
-                        test_id = f"test_{len(existing_json['tests'])}"
-                        new_test = {
-                            "testId": f"tests/{testfile}.py::{test_name}",
-                            "id": test_id,
-                            "log": f"Test aborted: {abort_info.get('reason', 'Test aborted or crashed.')}\\nAbort detected at: {abort_time}\\nGPU ID: {gpu_id}",
-                            "extras": [],
-                            "resultsTableRow": [
-                                f'<td class="col-result">Failed</td>',
-                                f'<td class="col-name">tests/{testfile}.py::{test_name}</td>',
-                                f'<td class="col-duration">{duration_str}</td>',
-                                f'<td class="col-links"></td>',
-                            ],
-                            "tableHtml": [],
-                            "result": "failed",
-                            "collapsed": False,
-                        }
-                        existing_json["tests"][test_id] = new_test
-
-                        # Re-encode the JSON and escape for HTML
-                        updated_json_str = html.escape(json.dumps(existing_json))
-                        html_content = re.sub(
-                            jsonblob_pattern,
-                            f'data-jsonblob="{updated_json_str}"',
-                            html_content,
-                        )
-
-                    except (json.JSONDecodeError, Exception) as e:
-                        print(f"Warning: Could not update JSON data in HTML file: {e}")
-
-                # Ensure the reload button has the hidden class to prevent "still running" message
+                # Ensure the reload button has the hidden class
                 html_content = re.sub(
                     r'class="summary__reload__button\s*"',
                     'class="summary__reload__button hidden"',
@@ -542,9 +567,7 @@ GPU ID: {gpu_id}</div>
 
                 print(f"Appended abort test to existing HTML report: {html_file}")
             else:
-                print(
-                    f"Warning: Could not find </table> tag in existing HTML file {html_file}"
-                )
+                print(f"Warning: Could not find </table> tag in existing HTML file {html_file}")
                 # Fall back to creating new file
                 _create_new_html_file(html_file, testfile, abort_info)
         else:
@@ -560,9 +583,9 @@ GPU ID: {gpu_id}</div>
 
 
 def _create_new_html_file(html_file, testfile, abort_info):
-    """Create a new HTML file for abort-only report"""
+    """Create a new HTML file for abort-only report."""
     try:
-        # Create the complete HTML structure matching xxx_test_log.html exactly
+        # Create the complete HTML structure matching pytest-html format
         test_name = abort_info["test_name"]
         duration = abort_info.get("duration", 0)
         abort_time = abort_info.get("abort_time", "")
@@ -574,7 +597,10 @@ def _create_new_html_file(html_file, testfile, abort_info):
         seconds = int(duration % 60)
         duration_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
-        # Create JSON data for the data-container (this is what pytest_html_merger reads)
+        # Create JSON data for the data-container
+        abort_reason = abort_info.get("reason", "Test aborted or crashed.")
+        log_msg = f"Test aborted: {abort_reason}\\nAbort detected at: {abort_time}\\nGPU ID: {gpu_id}"
+        
         json_data = {
             "environment": {
                 "Python": "3.x",
@@ -593,13 +619,13 @@ def _create_new_html_file(html_file, testfile, abort_info):
                 "test_0": {
                     "testId": f"tests/{testfile}.py::{test_name}",
                     "id": "test_0",
-                    "log": f"Test aborted: {abort_info.get('reason', 'Test aborted or crashed.')}\\nAbort detected at: {abort_time}\\nGPU ID: {gpu_id}",
+                    "log": log_msg,
                     "extras": [],
                     "resultsTableRow": [
-                        f'<td class="col-result">Failed</td>',
+                        '<td class="col-result">Failed</td>',
                         f'<td class="col-name">tests/{testfile}.py::{test_name}</td>',
                         f'<td class="col-duration">{duration_str}</td>',
-                        f'<td class="col-links"></td>',
+                        '<td class="col-links"></td>',
                     ],
                     "tableHtml": [],
                     "result": "failed",
@@ -614,7 +640,38 @@ def _create_new_html_file(html_file, testfile, abort_info):
         # Convert JSON to HTML-escaped string for data-jsonblob attribute
         json_blob = html.escape(json.dumps(json_data))
 
-        html_content = f"""<!DOCTYPE html>
+        # Create the HTML content
+        current_time_str = datetime.now().strftime('%d-%b-%Y at %H:%M:%S')
+        log_content = (
+            f"Test aborted: {abort_reason}<br/>"
+            f"Abort detected at: {abort_time}<br/>"
+            f"GPU ID: {gpu_id}"
+        )
+        
+        html_content = _generate_html_template(
+            testfile, test_name, duration_str, current_time_str, 
+            log_content, json_blob
+        )
+
+        # Ensure the logs directory exists
+        os.makedirs(os.path.dirname(html_file), exist_ok=True)
+
+        # Write the HTML file
+        with open(html_file, "w", encoding="utf-8") as f:
+            f.write(html_content)
+
+        print(f"Created new HTML report: {html_file}")
+
+    except (OSError, IOError) as e:
+        print(f"Failed to write new HTML report for {testfile}: {e}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        print(f"Unexpected error creating new HTML report for {testfile}: {e}")
+        traceback.print_exc()
+
+
+def _generate_html_template(testfile, test_name, duration_str, current_time_str, log_content, json_blob):
+    """Generate HTML template for test report."""
+    return f"""<!DOCTYPE html>
         <html>
           <head>
             <meta charset="utf-8"/>
@@ -623,7 +680,7 @@ def _create_new_html_file(html_file, testfile, abort_info):
           </head>
           <body onLoad="init()">
             <h1 id="title">{testfile}_log.html</h1>
-            <p>Report generated on {datetime.now().strftime('%d-%b-%Y at %H:%M:%S')} by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v4.1.1</p>
+            <p>Report generated on {current_time_str} by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v4.1.1</p>
             <div id="environment-header">
               <h2>Environment</h2>
             </div>
@@ -689,9 +746,7 @@ def _create_new_html_file(html_file, testfile, abort_info):
                     <div class="extraHTML"></div>
                     <div class="logwrapper">
                       <div class="logexpander"></div>
-                      <div class="log">Test aborted: {abort_info.get('reason', 'Test aborted or crashed.')}<br/>
-        Abort detected at: {abort_time}<br/>
-        GPU ID: {gpu_id}</div>
+                      <div class="log">{log_content}</div>
                     </div>
                   </td>
                 </tr>
@@ -706,23 +761,9 @@ def _create_new_html_file(html_file, testfile, abort_info):
           </body>
         </html>"""
 
-        # Ensure the logs directory exists
-        os.makedirs(os.path.dirname(html_file), exist_ok=True)
-
-        # Write the HTML file
-        with open(html_file, "w", encoding="utf-8") as f:
-            f.write(html_content)
-
-        print(f"Created new HTML report: {html_file}")
-
-    except (OSError, IOError) as e:
-        print(f"Failed to write new HTML report for {testfile}: {e}")
-    except Exception as e:
-        print(f"Unexpected error creating new HTML report for {testfile}: {e}")
-        traceback.print_exc()
-
 
 def run_parallel(all_testmodules, p, c):
+    """Run tests in parallel across multiple GPUs."""
     print(f"Running tests with parallelism = {p}")
     available_gpu_tokens = list(range(p))
     executor = ThreadPoolExecutor(max_workers=p)
@@ -734,16 +775,18 @@ def run_parallel(all_testmodules, p, c):
 
 
 def find_num_gpus():
+    """Find the number of AMD/ATI GPUs available."""
     cmd = [r"lspci|grep 'controller\|accel'|grep 'AMD/ATI'|wc -l"]
     _, _, stdout = run_shell_command(cmd, shell=True)
     return int(stdout)
 
 
 def main(args):
+    """Main function to run all test modules."""
     all_testmodules = collect_testmodules()
     run_parallel(all_testmodules, args.parallel, args.continue_on_fail)
     generate_final_report()
-    exit(LAST_CODE)
+    sys.exit(LAST_CODE)
 
 
 if __name__ == "__main__":
@@ -755,12 +798,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "-c", "--continue_on_fail", action="store_true", help="continue on failure"
     )
-    args = parser.parse_args()
-    if args.continue_on_fail:
+    parsed_args = parser.parse_args()
+    if parsed_args.continue_on_fail:
         print("continue on fail is set")
-    if args.parallel is None:
+    if parsed_args.parallel is None:
         sys_gpu_count = find_num_gpus()
-        args.parallel = sys_gpu_count
+        parsed_args.parallel = sys_gpu_count
         print("%d GPUs detected." % sys_gpu_count)
 
-    main(args)
+    main(parsed_args)
