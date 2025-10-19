@@ -12,6 +12,30 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
+              "id": "96ec6225-7ee8-3acb-8774-989fd9682be5",
+              "name": "resources.rules.use-timeout",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.use-timeout"
+              },
+              "fullDescription": {
+                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "help": {
+                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.use-timeout"
+                ]
+              }
+            },
+            {
               "id": "fdde68ec-85be-350b-b97a-8311c0ef4e04",
               "name": "resources.rules.missing-pip-no-cache-dir",
               "shortDescription": {
@@ -32,30 +56,6 @@
                 "precision": "very-high",
                 "tags": [
                   "resources.rules.missing-pip-no-cache-dir"
-                ]
-              }
-            },
-            {
-              "id": "18325d3e-87de-3424-9d11-453c7026fb2e",
-              "name": "resources.rules.use-timeout",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.use-timeout"
-              },
-              "fullDescription": {
-                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "warning"
-              },
-              "help": {
-                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.use-timeout"
                 ]
               }
             },
@@ -84,79 +84,7 @@
               }
             },
             {
-              "id": "96ec6225-7ee8-3acb-8774-989fd9682be5",
-              "name": "resources.rules.use-timeout",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.use-timeout"
-              },
-              "fullDescription": {
-                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "warning"
-              },
-              "help": {
-                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.use-timeout"
-                ]
-              }
-            },
-            {
-              "id": "020a0a39-161d-38e2-b3a8-52ef35f1b784",
-              "name": "resources.rules.missing-pip-no-cache-dir",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
-              },
-              "fullDescription": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "note"
-              },
-              "help": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.missing-pip-no-cache-dir"
-                ]
-              }
-            },
-            {
-              "id": "9f96169d-0638-3704-9a87-ff6df7607a6b",
-              "name": "resources.rules.missing-pip-no-cache-dir",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
-              },
-              "fullDescription": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "note"
-              },
-              "help": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.missing-pip-no-cache-dir"
-                ]
-              }
-            },
-            {
-              "id": "dd48c871-286f-3b11-bb90-0004d57d1e6f",
+              "id": "18325d3e-87de-3424-9d11-453c7026fb2e",
               "name": "resources.rules.use-timeout",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.use-timeout"
@@ -204,6 +132,102 @@
               }
             },
             {
+              "id": "dd48c871-286f-3b11-bb90-0004d57d1e6f",
+              "name": "resources.rules.use-timeout",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.use-timeout"
+              },
+              "fullDescription": {
+                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "help": {
+                "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.use-timeout"
+                ]
+              }
+            },
+            {
+              "id": "9f96169d-0638-3704-9a87-ff6df7607a6b",
+              "name": "resources.rules.missing-pip-no-cache-dir",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
+              },
+              "fullDescription": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "note"
+              },
+              "help": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.missing-pip-no-cache-dir"
+                ]
+              }
+            },
+            {
+              "id": "020a0a39-161d-38e2-b3a8-52ef35f1b784",
+              "name": "resources.rules.missing-pip-no-cache-dir",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
+              },
+              "fullDescription": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "note"
+              },
+              "help": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.missing-pip-no-cache-dir"
+                ]
+              }
+            },
+            {
+              "id": "c6b6ec47-6228-3873-beb7-b546f2b37b8f",
+              "name": "resources.rules.missing-pip-no-cache-dir",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
+              },
+              "fullDescription": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "note"
+              },
+              "help": {
+                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.missing-pip-no-cache-dir"
+                ]
+              }
+            },
+            {
               "id": "6f3912da-194a-33f3-a743-0fec08824cee",
               "name": "resources.rules.set-pipefail",
               "shortDescription": {
@@ -228,7 +252,7 @@
               }
             },
             {
-              "id": "c6b6ec47-6228-3873-beb7-b546f2b37b8f",
+              "id": "0ba71a22-df71-3e67-9a66-ced10fa6ba9b",
               "name": "resources.rules.missing-pip-no-cache-dir",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
@@ -276,7 +300,7 @@
               }
             },
             {
-              "id": "0ba71a22-df71-3e67-9a66-ced10fa6ba9b",
+              "id": "b51b2b07-4921-3e53-bf87-0d6682049a2a",
               "name": "resources.rules.missing-pip-no-cache-dir",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
@@ -300,26 +324,26 @@
               }
             },
             {
-              "id": "b51b2b07-4921-3e53-bf87-0d6682049a2a",
-              "name": "resources.rules.missing-pip-no-cache-dir",
+              "id": "ac4ef93f-d6f8-3238-b964-501353016158",
+              "name": "resources.rules.set-pipefail",
               "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.missing-pip-no-cache-dir"
+                "text": "Opengrep Finding: resources.rules.set-pipefail"
               },
               "fullDescription": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
+                "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "note"
+                "level": "warning"
               },
               "help": {
-                "text": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "This '$PIP install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL3042](https://github.com/hadolint/hadolint/wiki/DL3042)\n"
+                "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL4006](https://github.com/hadolint/hadolint/wiki/DL4006)\n"
               },
               "properties": {
                 "precision": "very-high",
                 "tags": [
-                  "resources.rules.missing-pip-no-cache-dir"
+                  "resources.rules.set-pipefail"
                 ]
               }
             },
@@ -373,26 +397,26 @@
               }
             },
             {
-              "id": "ac4ef93f-d6f8-3238-b964-501353016158",
-              "name": "resources.rules.set-pipefail",
+              "id": "42124549-022e-31f9-911f-fddcf1db098b",
+              "name": "resources.rules.insecure-file-permissions",
               "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.set-pipefail"
+                "text": "Opengrep Finding: resources.rules.insecure-file-permissions"
               },
               "fullDescription": {
-                "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
+                "text": "Insecure file permissions detected (world-writable or world-executable).\n"
               },
               "defaultConfiguration": {
                 "enabled": true,
                 "level": "warning"
               },
               "help": {
-                "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [https://github.com/hadolint/hadolint/wiki/DL4006](https://github.com/hadolint/hadolint/wiki/DL4006)\n"
+                "text": "Insecure file permissions detected (world-writable or world-executable).\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "Insecure file permissions detected (world-writable or world-executable).\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
               },
               "properties": {
                 "precision": "very-high",
                 "tags": [
-                  "resources.rules.set-pipefail"
+                  "resources.rules.insecure-file-permissions"
                 ]
               }
             },
@@ -441,30 +465,6 @@
                 "precision": "very-high",
                 "tags": [
                   "resources.rules.dangerous-subprocess-use"
-                ]
-              }
-            },
-            {
-              "id": "42124549-022e-31f9-911f-fddcf1db098b",
-              "name": "resources.rules.insecure-file-permissions",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.insecure-file-permissions"
-              },
-              "fullDescription": {
-                "text": "Insecure file permissions detected (world-writable or world-executable).\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "warning"
-              },
-              "help": {
-                "text": "Insecure file permissions detected (world-writable or world-executable).\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "Insecure file permissions detected (world-writable or world-executable).\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.insecure-file-permissions"
                 ]
               }
             },
@@ -542,30 +542,6 @@
               }
             },
             {
-              "id": "82b46612-8b7c-30bb-b535-069ce0249a05",
-              "name": "resources.rules.insecure-file-permissions",
-              "shortDescription": {
-                "text": "Opengrep Finding: resources.rules.insecure-file-permissions"
-              },
-              "fullDescription": {
-                "text": "Insecure file permissions detected (world-writable or world-executable).\n"
-              },
-              "defaultConfiguration": {
-                "enabled": true,
-                "level": "warning"
-              },
-              "help": {
-                "text": "Insecure file permissions detected (world-writable or world-executable).\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
-                "markdown": "Insecure file permissions detected (world-writable or world-executable).\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
-              },
-              "properties": {
-                "precision": "very-high",
-                "tags": [
-                  "resources.rules.insecure-file-permissions"
-                ]
-              }
-            },
-            {
               "id": "197ad80e-fc23-33a9-8b09-b23e4d71f7a5",
               "name": "resources.rules.dangerous-subprocess-use",
               "shortDescription": {
@@ -590,7 +566,31 @@
               }
             },
             {
-              "id": "a1ad5654-f584-376a-9869-955f0f94b598",
+              "id": "82b46612-8b7c-30bb-b535-069ce0249a05",
+              "name": "resources.rules.insecure-file-permissions",
+              "shortDescription": {
+                "text": "Opengrep Finding: resources.rules.insecure-file-permissions"
+              },
+              "fullDescription": {
+                "text": "Insecure file permissions detected (world-writable or world-executable).\n"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "help": {
+                "text": "Insecure file permissions detected (world-writable or world-executable).\n\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro",
+                "markdown": "Insecure file permissions detected (world-writable or world-executable).\n\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>"
+              },
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "resources.rules.insecure-file-permissions"
+                ]
+              }
+            },
+            {
+              "id": "6dd40971-089d-3957-b45c-c4683125a3d7",
               "name": "resources.rules.dangerous-subprocess-use",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.dangerous-subprocess-use"
@@ -614,7 +614,7 @@
               }
             },
             {
-              "id": "6dd40971-089d-3957-b45c-c4683125a3d7",
+              "id": "a1ad5654-f584-376a-9869-955f0f94b598",
               "name": "resources.rules.dangerous-subprocess-use",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.dangerous-subprocess-use"
@@ -710,7 +710,7 @@
               }
             },
             {
-              "id": "d4858ac6-7930-37cd-a0b3-d202b30c04ee",
+              "id": "078d65e6-806e-3790-9a75-bc69d5879521",
               "name": "resources.rules.dlint-catastrophic-redos",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.dlint-catastrophic-redos"
@@ -734,7 +734,7 @@
               }
             },
             {
-              "id": "078d65e6-806e-3790-9a75-bc69d5879521",
+              "id": "d4858ac6-7930-37cd-a0b3-d202b30c04ee",
               "name": "resources.rules.dlint-catastrophic-redos",
               "shortDescription": {
                 "text": "Opengrep Finding: resources.rules.dlint-catastrophic-redos"
@@ -769,6 +769,37 @@
       "language": "en-US",
       "results": [
         {
+          "ruleId": "96ec6225-7ee8-3acb-8774-989fd9682be5",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ci/upstream_ci_watcher.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 75,
+                  "startColumn": 12,
+                  "endLine": 75,
+                  "endColumn": 63,
+                  "snippet": {
+                    "text": "    resp = requests.patch(url=url, headers=headers, body=body)"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_2"
+          },
+          "properties": {}
+        },
+        {
           "ruleId": "fdde68ec-85be-350b-b97a-8311c0ef4e04",
           "kind": "fail",
           "level": "warning",
@@ -796,37 +827,6 @@
           ],
           "fingerprints": {
             "matchBasedId/v1": "9487e96c22cda596a5a72e8701e6c65076117353f77b363e15d382275ac4d54769886d9ea44890059b1bb3b12601343c5004cf7311bc001e24af2c9653361904_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "18325d3e-87de-3424-9d11-453c7026fb2e",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "ci/upstream_ci_watcher.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 49,
-                  "startColumn": 12,
-                  "endLine": 49,
-                  "endColumn": 50,
-                  "snippet": {
-                    "text": "    resp = requests.get(url=url, headers=headers)"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_1"
           },
           "properties": {}
         },
@@ -862,7 +862,7 @@
           "properties": {}
         },
         {
-          "ruleId": "96ec6225-7ee8-3acb-8774-989fd9682be5",
+          "ruleId": "18325d3e-87de-3424-9d11-453c7026fb2e",
           "kind": "fail",
           "level": "warning",
           "message": {
@@ -876,112 +876,19 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 75,
+                  "startLine": 49,
                   "startColumn": 12,
-                  "endLine": 75,
-                  "endColumn": 63,
+                  "endLine": 49,
+                  "endColumn": 50,
                   "snippet": {
-                    "text": "    resp = requests.patch(url=url, headers=headers, body=body)"
+                    "text": "    resp = requests.get(url=url, headers=headers)"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_2"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "020a0a39-161d-38e2-b3a8-52ef35f1b784",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "This 'pip3 install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker/Dockerfile.jax-ubu22",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 64,
-                  "startColumn": 1,
-                  "endLine": 66,
-                  "endColumn": 20,
-                  "snippet": {
-                    "text": "RUN --mount=type=cache,mode=0755,target=/root/.cache/pip \\\n    --mount=type=bind,source=build/requirements.txt,target=requirements.txt \\\n    pip3 install -r requirements.txt"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "c0bccc2ae712404120f097538badb9de52c4a7612ee062e094587e5de68c4df16e6cac45fd608d7402aa3e63085f3718fea8219280f5613adf7d62ed52c8fe7c_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "9f96169d-0638-3704-9a87-ff6df7607a6b",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "This 'pip3 install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "docker/Dockerfile.jax-ubu22",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 41,
-                  "startColumn": 1,
-                  "endLine": 42,
-                  "endColumn": 27,
-                  "snippet": {
-                    "text": "RUN --mount=type=cache,mode=0755,target=/root/.cache/pip \\\n    pip3 install --upgrade --force-reinstall setuptools pip && \\"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "907f8e360ae558b0c8e74bda63646fa8df05848ada7da77fffe492b25903c44cc993631847a45ee2a6cfa77f4bf61544b76a697d1009482aa153a48c111e96ce_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "dd48c871-286f-3b11-bb90-0004d57d1e6f",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "ci/upstream_ci_watcher.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 102,
-                  "startColumn": 12,
-                  "endLine": 102,
-                  "endColumn": 70,
-                  "snippet": {
-                    "text": "    resp = requests.post(url=webhook_url, headers=headers, json=body)"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_3"
+            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_1"
           },
           "properties": {}
         },
@@ -1017,11 +924,42 @@
           "properties": {}
         },
         {
-          "ruleId": "6f3912da-194a-33f3-a743-0fec08824cee",
+          "ruleId": "dd48c871-286f-3b11-bb90-0004d57d1e6f",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
+            "text": "By default, 'requests' calls wait until the connection is closed.\nThis means a 'requests' call without a timeout will hang the program\nif a response is never received. Consider setting a timeout for all\n'requests'.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ci/upstream_ci_watcher.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 102,
+                  "startColumn": 12,
+                  "endLine": 102,
+                  "endColumn": 70,
+                  "snippet": {
+                    "text": "    resp = requests.post(url=webhook_url, headers=headers, json=body)"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "3f2ab31f2d29338ad0fb70ea82f0db8cc197cf39656d078b8954782c6967d4fd38eb63845434555c176f0afb5986c6e516b36015ee61584b793f5c4f3ec2c7df_3"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "9f96169d-0638-3704-9a87-ff6df7607a6b",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "This 'pip3 install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
           },
           "locations": [
             {
@@ -1031,19 +969,50 @@
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 71,
+                  "startLine": 41,
                   "startColumn": 1,
-                  "endLine": 72,
-                  "endColumn": 47,
+                  "endLine": 42,
+                  "endColumn": 27,
                   "snippet": {
-                    "text": "RUN bash -c '  \\\n    major_version=$(echo \"$ROCM_VERSION\" | cut -d. -f1) && \\"
+                    "text": "RUN --mount=type=cache,mode=0755,target=/root/.cache/pip \\\n    pip3 install --upgrade --force-reinstall setuptools pip && \\"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "161e9a4a06239dbc320cb2a6ac67baa3af00463a7fa8fdd9cf5301c7c80c9c375bae32d21ea15d0f5d49e12c1ec527abd358255196eb7f3b859f2fe96e5f627d_0"
+            "matchBasedId/v1": "907f8e360ae558b0c8e74bda63646fa8df05848ada7da77fffe492b25903c44cc993631847a45ee2a6cfa77f4bf61544b76a697d1009482aa153a48c111e96ce_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "020a0a39-161d-38e2-b3a8-52ef35f1b784",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "This 'pip3 install' is missing '--no-cache-dir'. This flag prevents\npackage archives from being kept around, thereby reducing image size.\nAdd '--no-cache-dir'.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker/Dockerfile.jax-ubu22",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 64,
+                  "startColumn": 1,
+                  "endLine": 66,
+                  "endColumn": 20,
+                  "snippet": {
+                    "text": "RUN --mount=type=cache,mode=0755,target=/root/.cache/pip \\\n    --mount=type=bind,source=build/requirements.txt,target=requirements.txt \\\n    pip3 install -r requirements.txt"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "c0bccc2ae712404120f097538badb9de52c4a7612ee062e094587e5de68c4df16e6cac45fd608d7402aa3e63085f3718fea8219280f5613adf7d62ed52c8fe7c_0"
           },
           "properties": {}
         },
@@ -1079,33 +1048,33 @@
           "properties": {}
         },
         {
-          "ruleId": "812f3a0d-c7a3-3fc3-a2f9-8fbc87ad064e",
+          "ruleId": "6f3912da-194a-33f3-a743-0fec08824cee",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "This 'apt-get install' is missing '--no-install-recommends'. This prevents\nunnecessary packages from being installed, thereby reducing image size. Add\n'--no-install-recommends'.\n"
+            "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "docker/Dockerfile.jax-ubu24",
+                  "uri": "docker/Dockerfile.jax-ubu22",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 4,
+                  "startLine": 71,
                   "startColumn": 1,
-                  "endLine": 5,
-                  "endColumn": 41,
+                  "endLine": 72,
+                  "endColumn": 47,
                   "snippet": {
-                    "text": "RUN --mount=type=cache,target=/var/cache/apt \\\n    apt-get update && apt-get install -y python3 python-is-python3 python3-pip && \\"
+                    "text": "RUN bash -c '  \\\n    major_version=$(echo \"$ROCM_VERSION\" | cut -d. -f1) && \\"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "60823e3336592dd6b15d7a69fd4a76110cd9aab8d63a8496dc0238e6fe1c4f95a38811f6dd94fe4ec7af0c4f801dd869f9bca0d76390b7fc7896d1ac9b2094f5_0"
+            "matchBasedId/v1": "161e9a4a06239dbc320cb2a6ac67baa3af00463a7fa8fdd9cf5301c7c80c9c375bae32d21ea15d0f5d49e12c1ec527abd358255196eb7f3b859f2fe96e5f627d_0"
           },
           "properties": {}
         },
@@ -1141,6 +1110,37 @@
           "properties": {}
         },
         {
+          "ruleId": "812f3a0d-c7a3-3fc3-a2f9-8fbc87ad064e",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "This 'apt-get install' is missing '--no-install-recommends'. This prevents\nunnecessary packages from being installed, thereby reducing image size. Add\n'--no-install-recommends'.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker/Dockerfile.jax-ubu24",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 4,
+                  "startColumn": 1,
+                  "endLine": 5,
+                  "endColumn": 41,
+                  "snippet": {
+                    "text": "RUN --mount=type=cache,target=/var/cache/apt \\\n    apt-get update && apt-get install -y python3 python-is-python3 python3-pip && \\"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "60823e3336592dd6b15d7a69fd4a76110cd9aab8d63a8496dc0238e6fe1c4f95a38811f6dd94fe4ec7af0c4f801dd869f9bca0d76390b7fc7896d1ac9b2094f5_0"
+          },
+          "properties": {}
+        },
+        {
           "ruleId": "b51b2b07-4921-3e53-bf87-0d6682049a2a",
           "kind": "fail",
           "level": "warning",
@@ -1168,6 +1168,37 @@
           ],
           "fingerprints": {
             "matchBasedId/v1": "75e5fc3919727afac702f532549154518b3dcc27ffaff3ea8be87356c63975c02b87d91d3c633b1d7fd9f31453e0cf52a78939883dff965956640933ec4e41e5_1"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "ac4ef93f-d6f8-3238-b964-501353016158",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docker/Dockerfile.jax-ubu24",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 72,
+                  "startColumn": 1,
+                  "endLine": 73,
+                  "endColumn": 47,
+                  "snippet": {
+                    "text": "RUN bash -c '  \\\n    major_version=$(echo \"$ROCM_VERSION\" | cut -d. -f1) && \\"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "3448e4fc8fa3c93a6da70e4d1c432257a7bb05ff0661ffb2fb75fd6cbc92ad926ff8969234c0b237e4d8f94e52a407974d1ff320fd188f5ca6917b01361b9c14_0"
           },
           "properties": {}
         },
@@ -1234,33 +1265,33 @@
           "properties": {}
         },
         {
-          "ruleId": "ac4ef93f-d6f8-3238-b964-501353016158",
+          "ruleId": "42124549-022e-31f9-911f-fddcf1db098b",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Only the exit code from the final command in this RUN instruction will be evaluated unless 'pipefail' is set.\nIf you want to fail the command at any stage in the pipe, set 'pipefail' by including 'SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"] before the command.\nIf you're using alpine and don't have bash installed, communicate this explicitly with `SHELL [\"/bin/ash\"]`.\n"
+            "text": "Insecure file permissions detected (world-writable or world-executable).\n"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "docker/Dockerfile.jax-ubu24",
+                  "uri": "jax_rocm_plugin/jaxlib_ext/tools/build_gpu_kernels_wheel.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 72,
-                  "startColumn": 1,
-                  "endLine": 73,
-                  "endColumn": 47,
+                  "startLine": 156,
+                  "startColumn": 27,
+                  "endLine": 156,
+                  "endColumn": 32,
                   "snippet": {
-                    "text": "RUN bash -c '  \\\n    major_version=$(echo \"$ROCM_VERSION\" | cut -d. -f1) && \\"
+                    "text": "        os.chmod(so_path, perms)"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "3448e4fc8fa3c93a6da70e4d1c432257a7bb05ff0661ffb2fb75fd6cbc92ad926ff8969234c0b237e4d8f94e52a407974d1ff320fd188f5ca6917b01361b9c14_0"
+            "matchBasedId/v1": "552fe1ffe5912460525fde3440b8b04262f57aefe5b93f1851a6ef354c7d1869a3ddf44a13546e86ac330547caad877c2fc866969cf35f60312dcf23332c371e_0"
           },
           "properties": {}
         },
@@ -1323,37 +1354,6 @@
           ],
           "fingerprints": {
             "matchBasedId/v1": "3c962f504794c28d6d44275d3279ec9d72389e0da7a0ad5ae730488776f1d4d20626708d1561db22a8c1924cb4134df60a3c429ac350ba65e2c1646f53c1eeb3_0"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "42124549-022e-31f9-911f-fddcf1db098b",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Insecure file permissions detected (world-writable or world-executable).\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "jax_rocm_plugin/jaxlib_ext/tools/build_gpu_kernels_wheel.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 156,
-                  "startColumn": 27,
-                  "endLine": 156,
-                  "endColumn": 32,
-                  "snippet": {
-                    "text": "        os.chmod(so_path, perms)"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "552fe1ffe5912460525fde3440b8b04262f57aefe5b93f1851a6ef354c7d1869a3ddf44a13546e86ac330547caad877c2fc866969cf35f60312dcf23332c371e_0"
           },
           "properties": {}
         },
@@ -1451,37 +1451,6 @@
           "properties": {}
         },
         {
-          "ruleId": "82b46612-8b7c-30bb-b535-069ce0249a05",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Insecure file permissions detected (world-writable or world-executable).\n"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "jax_rocm_plugin/pjrt/tools/build_gpu_plugin_wheel.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 141,
-                  "startColumn": 33,
-                  "endLine": 141,
-                  "endColumn": 38,
-                  "snippet": {
-                    "text": "      os.chmod(shared_obj_path, perms)"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "67339a34c627f09c033022c55a5cfb32b79d2660f2a8a3d8663bdc7fe7b2c5c9d48bf6614ca58966a3b0a543307732326bd7e48404ec7858719b7c576669f9d3_0"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "197ad80e-fc23-33a9-8b09-b23e4d71f7a5",
           "kind": "fail",
           "level": "warning",
@@ -1513,33 +1482,33 @@
           "properties": {}
         },
         {
-          "ruleId": "a1ad5654-f584-376a-9869-955f0f94b598",
+          "ruleId": "82b46612-8b7c-30bb-b535-069ce0249a05",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Detected subprocess function 'check_call' without a static string. If this data can be\ncontrolled by a malicious actor, it may be an instance of command injection.\nAudit the use of this call to ensure it is not controllable by an external resource.\nYou may consider using 'shlex.escape()'.\n"
+            "text": "Insecure file permissions detected (world-writable or world-executable).\n"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "stack.py",
+                  "uri": "jax_rocm_plugin/pjrt/tools/build_gpu_plugin_wheel.py",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 118,
-                  "startColumn": 9,
-                  "endLine": 118,
-                  "endColumn": 35,
+                  "startLine": 141,
+                  "startColumn": 33,
+                  "endLine": 141,
+                  "endColumn": 38,
                   "snippet": {
-                    "text": "        subprocess.check_call(cmd)"
+                    "text": "      os.chmod(shared_obj_path, perms)"
                   }
                 }
               }
             }
           ],
           "fingerprints": {
-            "matchBasedId/v1": "6f220649f464abd9063f1fe269ee6416fa0307e36c047a2d7fdc6af0b39b3cf7b4f623028417064f8904877cb8a527d7e25821078da95b2629c13f9d8cd3e003_1"
+            "matchBasedId/v1": "67339a34c627f09c033022c55a5cfb32b79d2660f2a8a3d8663bdc7fe7b2c5c9d48bf6614ca58966a3b0a543307732326bd7e48404ec7858719b7c576669f9d3_0"
           },
           "properties": {}
         },
@@ -1571,6 +1540,37 @@
           ],
           "fingerprints": {
             "matchBasedId/v1": "e7e3d85ee796b080c89eee7cdc660644011a0b63a8d4d012840c4f51bddf28d8e75bd71f7ba47c4f8319d82344aec4a9234453d15ba48af2898e4a21294c1c25_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "a1ad5654-f584-376a-9869-955f0f94b598",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Detected subprocess function 'check_call' without a static string. If this data can be\ncontrolled by a malicious actor, it may be an instance of command injection.\nAudit the use of this call to ensure it is not controllable by an external resource.\nYou may consider using 'shlex.escape()'.\n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "stack.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 118,
+                  "startColumn": 9,
+                  "endLine": 118,
+                  "endColumn": 35,
+                  "snippet": {
+                    "text": "        subprocess.check_call(cmd)"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "6f220649f464abd9063f1fe269ee6416fa0307e36c047a2d7fdc6af0b39b3cf7b4f623028417064f8904877cb8a527d7e25821078da95b2629c13f9d8cd3e003_1"
           },
           "properties": {}
         },
@@ -1668,37 +1668,6 @@
           "properties": {}
         },
         {
-          "ruleId": "d4858ac6-7930-37cd-a0b3-d202b30c04ee",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Regex `'tf_mirror_urls\\(\"[a-zA-Z0-9:/.]+/archive'` may be vulnerable to catastrophic backtracking, which may lead to denial of service attacks. (This rule only matches regex usage, not actual REDoS patterns. For full detection, use Semgrep Pro Engine.)"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "tools/update_xla_hash.py",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 72,
-                  "startColumn": 20,
-                  "endLine": 77,
-                  "endColumn": 10,
-                  "snippet": {
-                    "text": "        contents = re.sub(\n            'tf_mirror_urls\\(\"[a-zA-Z0-9:/.]+/archive',\n            f'tf_mirror_urls(\"{GH_BASE_URL}/{xla_repo}/archive',\n            contents,\n            flags=re.M,\n        )"
-                  }
-                }
-              }
-            }
-          ],
-          "fingerprints": {
-            "matchBasedId/v1": "fa0e8fac5c1d0daa2800b403482bfdb78a0ee022feb73d62f078286348bb95a9882b2da36cfcdec2d3e42f212b090bacbcb931fe43cb0ca88a3a1d6b65df8ab6_0"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "078d65e6-806e-3790-9a75-bc69d5879521",
           "kind": "fail",
           "level": "warning",
@@ -1726,6 +1695,37 @@
           ],
           "fingerprints": {
             "matchBasedId/v1": "063913722c8a345f3c251b93c5c31ab130b3aa7c60d2349398655520348f8ac16cb31c0076feb9661304a64cba892d9efe2a5afe2f7a95d8386a32033de64fa3_0"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "d4858ac6-7930-37cd-a0b3-d202b30c04ee",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Regex `'tf_mirror_urls\\(\"[a-zA-Z0-9:/.]+/archive'` may be vulnerable to catastrophic backtracking, which may lead to denial of service attacks. (This rule only matches regex usage, not actual REDoS patterns. For full detection, use Semgrep Pro Engine.)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "tools/update_xla_hash.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 72,
+                  "startColumn": 20,
+                  "endLine": 77,
+                  "endColumn": 10,
+                  "snippet": {
+                    "text": "        contents = re.sub(\n            'tf_mirror_urls\\(\"[a-zA-Z0-9:/.]+/archive',\n            f'tf_mirror_urls(\"{GH_BASE_URL}/{xla_repo}/archive',\n            contents,\n            flags=re.M,\n        )"
+                  }
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "fa0e8fac5c1d0daa2800b403482bfdb78a0ee022feb73d62f078286348bb95a9882b2da36cfcdec2d3e42f212b090bacbcb931fe43cb0ca88a3a1d6b65df8ab6_0"
           },
           "properties": {}
         }
